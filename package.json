@@ -1,43 +1,57 @@
 {
-	"name": "collisions",
-	"version": "2.0.13",
-	"description": "Collision detection for circles, polygons, and points",
-	"main": "src/Collisions.mjs",
-	"scripts": {
-		"build": "rm -rf ./docs/* && esdoc && webpack"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/Sinova/Collisions.git"
-	},
-	"keywords": [
-		"Collision",
-		"Separating Axis Theorem",
-		"Bounding Volume Hierarchy",
-		"SAT",
-		"BVH",
-		"Circle",
-		"Polygon",
-		"Line",
-		"Shape",
-		"Separating",
-		"Axis",
-		"Theorem",
-		"Bounding",
-		"Volume",
-		"Hierarchy"
-	],
-	"author": "Samuel Hodge",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/Sinova/Collisions/issues"
-	},
-	"homepage": "https://github.com/Sinova/Collisions#readme",
-	"devDependencies": {
-		"esdoc": "^1.0.4",
-		"esdoc-standard-plugin": "^1.0.0",
-		"html-webpack-plugin": "^2.30.1",
-		"npm": "^5.5.1",
-		"webpack": "^3.9.0"
-	}
+  "name": "collisions",
+  "version": "2.0.13",
+  "description": "Collision detection for circles, polygons, and points",
+  "main": "src/Collisions.mjs",
+  "scripts": {
+    "build": "run-s test:*",
+    "build:docs": "rimraf docs && esdoc",
+    "build:webpack": "webpack",
+    "test": "run-s test:*",
+    "test:lint": "eslint ./src --ext .js,.mjs",
+    "test:unittest": "node --experimental-modules ./tests/Collisions.mjs | tap-spec",
+    "test:dependencies": "npm-check --production || echo \"Run 'npm run update' to interactively update dependencies for this project\"",
+    "update": "npm-check --update"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sinova/Collisions.git"
+  },
+  "keywords": [
+    "Collision",
+    "Separating Axis Theorem",
+    "Bounding Volume Hierarchy",
+    "SAT",
+    "BVH",
+    "Circle",
+    "Polygon",
+    "Line",
+    "Shape",
+    "Separating",
+    "Axis",
+    "Theorem",
+    "Bounding",
+    "Volume",
+    "Hierarchy"
+  ],
+  "author": "Samuel Hodge",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sinova/Collisions/issues"
+  },
+  "homepage": "https://github.com/Sinova/Collisions#readme",
+  "devDependencies": {
+    "esdoc": "^1.0.4",
+    "esdoc-standard-plugin": "^1.0.0",
+    "eslint": "^4.18.0",
+    "eslint-config-google": "^0.9.1",
+    "html-webpack-plugin": "^2.30.1",
+    "npm": "^5.5.1",
+    "npm-check": "^5.5.2",
+    "npm-run-all": "^4.1.2",
+    "rimraf": "^2.6.2",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.9.0",
+    "webpack": "^3.9.0"
+  }
 }

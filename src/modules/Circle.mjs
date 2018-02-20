@@ -41,4 +41,4 @@ export default class Circle extends Body {
 		context.moveTo(x + radius, y);
 		context.arc(x, y, radius, 0, Math.PI * 2);
 	}
-};
+}

@@ -93,7 +93,7 @@ export default class Polygon extends Body {
 	 * @param {CanvasRenderingContext2D} context The context to add the shape to
 	 */
 	draw(context) {
-		if(
+		if (
 			this._dirty_coords ||
 			this.x       !== this._x ||
 			this.y       !== this._y ||
@@ -106,18 +106,18 @@ export default class Polygon extends Body {
 
 		const coords = this._coords;
 
-		if(coords.length === 2) {
+		if (coords.length === 2) {
 			context.moveTo(coords[0], coords[1]);
 			context.arc(coords[0], coords[1], 1, 0, Math.PI * 2);
 		}
 		else {
 			context.moveTo(coords[0], coords[1]);
 
-			for(let i = 2; i < coords.length; i += 2) {
+			for (let i = 2; i < coords.length; i += 2) {
 				context.lineTo(coords[i], coords[i + 1]);
 			}
 
-			if(coords.length > 4) {
+			if (coords.length > 4) {
 				context.lineTo(coords[0], coords[1]);
 			}
 		}
@@ -137,7 +137,7 @@ export default class Polygon extends Body {
 
 		const points = this._points;
 
-		for(let i = 0, ix = 0, iy = 1; i < count; ++i, ix += 2, iy += 2) {
+		for (let i = 0, ix = 0, iy = 1; i < count; ++i, ix += 2, iy += 2) {
 			const new_point = new_points[i];
 
 			points[ix] = new_point[0];
@@ -165,11 +165,11 @@ export default class Polygon extends Body {
 		let min_y;
 		let max_y;
 
-		for(let ix = 0, iy = 1; ix < count; ix += 2, iy += 2) {
+		for (let ix = 0, iy = 1; ix < count; ix += 2, iy += 2) {
 			let coord_x = points[ix] * scale_x;
 			let coord_y = points[iy] * scale_y;
 
-			if(angle) {
+			if (angle) {
 				const cos   = Math.cos(angle);
 				const sin   = Math.sin(angle);
 				const tmp_x = coord_x;
@@ -185,22 +185,22 @@ export default class Polygon extends Body {
 			coords[ix] = coord_x;
 			coords[iy] = coord_y;
 
-			if(ix === 0) {
+			if (ix === 0) {
 				min_x = max_x = coord_x;
 				min_y = max_y = coord_y;
 			}
 			else {
-				if(coord_x < min_x) {
+				if (coord_x < min_x) {
 					min_x = coord_x;
 				}
-				else if(coord_x > max_x) {
+				else if (coord_x > max_x) {
 					max_x = coord_x;
 				}
 
-				if(coord_y < min_y) {
+				if (coord_y < min_y) {
 					min_y = coord_y;
 				}
-				else if(coord_y > max_y) {
+				else if (coord_y > max_y) {
 					max_y = coord_y;
 				}
 			}
@@ -228,7 +228,7 @@ export default class Polygon extends Body {
 		const normals = this._normals;
 		const count   = coords.length;
 
-		for(let ix = 0, iy = 1; ix < count; ix += 2, iy += 2) {
+		for (let ix = 0, iy = 1; ix < count; ix += 2, iy += 2) {
 			const next   = ix + 2 < count ? ix + 2 : 0;
 			const x      = coords[next] - coords[ix];
 			const y      = coords[next + 1] - coords[iy];
@@ -242,4 +242,4 @@ export default class Polygon extends Body {
 
 		this._dirty_normals = false;
 	}
-};
+}

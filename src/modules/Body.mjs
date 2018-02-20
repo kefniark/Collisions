@@ -84,7 +84,7 @@ export default class Body {
 	potentials() {
 		const bvh = this._bvh;
 
-		if(bvh === null) {
+		if (bvh === null) {
 			throw new Error('Body does not belong to a collision system');
 		}
 
@@ -97,13 +97,14 @@ export default class Body {
 	remove() {
 		const bvh = this._bvh;
 
-		if(bvh) {
+		if (bvh) {
 			bvh.remove(this, false);
 		}
 	}
 
 	/**
 	 * Creates a {@link Result} used to collect the detailed results of a collision test
+	 * @returns {Result}
 	 */
 	createResult() {
 		return new Result();
@@ -111,8 +112,9 @@ export default class Body {
 
 	/**
 	 * Creates a Result used to collect the detailed results of a collision test
+	 * @returns {Result}
 	 */
 	static createResult() {
 		return new Result();
 	}
-};
+}

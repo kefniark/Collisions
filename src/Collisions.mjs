@@ -71,6 +71,7 @@ class Collisions {
 
 	/**
 	 * Creates a {@link Result} used to collect the detailed results of a collision test
+	 * @returns {Result}
 	 */
 	createResult() {
 		return new Result();
@@ -78,6 +79,7 @@ class Collisions {
 
 	/**
 	 * Creates a Result used to collect the detailed results of a collision test
+	 * @returns {Result}
 	 */
 	static createResult() {
 		return new Result();
@@ -85,10 +87,11 @@ class Collisions {
 
 	/**
 	 * Inserts bodies into the collision system
-	 * @param {...Circle|...Polygon|...Point} bodies
+	 * @param {...Circle|Polygon|Point} bodies
+	 * @returns {Collisions}
 	 */
 	insert(...bodies) {
-		for(const body of bodies) {
+		for (const body of bodies) {
 			this._bvh.insert(body, false);
 		}
 
@@ -97,10 +100,11 @@ class Collisions {
 
 	/**
 	 * Removes bodies from the collision system
-	 * @param {...Circle|...Polygon|...Point} bodies
+	 * @param {...Circle|Polygon|Point} bodies
+	 * @returns {Collisions}
 	 */
 	remove(...bodies) {
-		for(const body of bodies) {
+		for (const body of bodies) {
 			this._bvh.remove(body, false);
 		}
 
@@ -109,6 +113,7 @@ class Collisions {
 
 	/**
 	 * Updates the collision system. This should be called before any collisions are tested.
+	 * @returns {Collisions}
 	 */
 	update() {
 		this._bvh.update();
@@ -121,7 +126,7 @@ class Collisions {
 	 * @param {CanvasRenderingContext2D} context The context to draw to
 	 */
 	draw(context) {
-		return this._bvh.draw(context);
+		this._bvh.draw(context);
 	}
 
 	/**
@@ -129,7 +134,7 @@ class Collisions {
 	 * @param {CanvasRenderingContext2D} context The context to draw to
 	 */
 	drawBVH(context) {
-		return this._bvh.drawBVH(context);
+		this._bvh.drawBVH(context);
 	}
 
 	/**
@@ -143,6 +148,7 @@ class Collisions {
 
 	/**
 	 * Determines if two bodies are colliding
+	 * @param {Circle|Polygon|Point} source
 	 * @param {Circle|Polygon|Point} target The target body to test against
 	 * @param {Result} [result = null] A Result object on which to store information about the collision
 	 * @param {Boolean} [aabb = true] Set to false to skip the AABB test (useful if you use your own potential collision heuristic)
@@ -151,7 +157,7 @@ class Collisions {
 	collides(source, target, result = null, aabb = true) {
 		return SAT(source, target, result, aabb);
 	}
-};
+}
 
 export {
 	Collisions as default,

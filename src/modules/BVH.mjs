@@ -26,10 +26,10 @@ export default class BVH {
 	 * @param {Boolean} [updating = false] Set to true if the body already exists in the BVH (used internally when updating the body's position)
 	 */
 	insert(body, updating = false) {
-		if(!updating) {
+		if (!updating) {
 			const bvh = body._bvh;
 
-			if(bvh && bvh !== this) {
+			if (bvh && bvh !== this) {
 				throw new Error('Body belongs to another collision system');
 			}
 
@@ -41,8 +41,8 @@ export default class BVH {
 		const body_x  = body.x;
 		const body_y  = body.y;
 
-		if(polygon) {
-			if(
+		if (polygon) {
+			if (
 				body._dirty_coords ||
 				body.x       !== body._x ||
 				body.y       !== body._y ||
@@ -69,13 +69,13 @@ export default class BVH {
 		let current = this._hierarchy;
 		let sort    = 0;
 
-		if(!current) {
+		if (!current) {
 			this._hierarchy = body;
 		}
 		else {
-			while(true) {
+			while (true) {
 				// Branch
-				if(current._bvh_branch) {
+				if (current._bvh_branch) {
 					const left            = current._bvh_left;
 					const left_min_y      = left._bvh_min_y;
 					const left_max_x      = left._bvh_max_x;
@@ -127,10 +127,10 @@ export default class BVH {
 					new_parent._bvh_max_x  = body_max_x > parent_max_x ? body_max_x : parent_max_x;
 					new_parent._bvh_max_y  = body_max_y > parent_max_y ? body_max_y : parent_max_y;
 
-					if(!grandparent) {
+					if (!grandparent) {
 						this._hierarchy = new_parent;
 					}
-					else if(grandparent._bvh_left === current) {
+					else if (grandparent._bvh_left === current) {
 						grandparent._bvh_left = new_parent;
 					}
 					else {
@@ -149,10 +149,10 @@ export default class BVH {
 	 * @param {Boolean} [updating = false] Set to true if this is a temporary removal (used internally when updating the body's position)
 	 */
 	remove(body, updating = false) {
-		if(!updating) {
+		if (!updating) {
 			const bvh = body._bvh;
 
-			if(bvh && bvh !== this) {
+			if (bvh && bvh !== this) {
 				throw new Error('Body belongs to another collision system');
 			}
 
@@ -160,7 +160,7 @@ export default class BVH {
 			this._bodies.splice(this._bodies.indexOf(body), 1);
 		}
 
-		if(this._hierarchy === body) {
+		if (this._hierarchy === body) {
 			this._hierarchy = null;
 
 			return;
@@ -173,12 +173,12 @@ export default class BVH {
 
 		sibling._bvh_parent = grandparent;
 
-		if(sibling._bvh_branch) {
+		if (sibling._bvh_branch) {
 			sibling._bvh_sort = parent._bvh_sort;
 		}
 
-		if(grandparent) {
-			if(grandparent._bvh_left === parent) {
+		if (grandparent) {
+			if (grandparent._bvh_left === parent) {
 				grandparent._bvh_left = sibling;
 			}
 			else {
@@ -187,7 +187,7 @@ export default class BVH {
 
 			let branch = grandparent;
 
-			while(branch) {
+			while (branch) {
 				const left       = branch._bvh_left;
 				const left_min_x = left._bvh_min_x;
 				const left_min_y = left._bvh_min_y;
@@ -222,21 +222,21 @@ export default class BVH {
 		const bodies = this._bodies;
 		const count  = bodies.length;
 
-		for(let i = 0; i < count; ++i) {
+		for (let i = 0; i < count; ++i) {
 			const body = bodies[i];
 
 			let update = false;
 
-			if(!update && body.padding !== body._bvh_padding) {
+			if (!update && body.padding !== body._bvh_padding) {
 				body._bvh_padding = body.padding;
 				update = true;
 			}
 
-			if(!update) {
+			if (!update) {
 				const polygon = body._polygon;
 
-				if(polygon) {
-					if(
+				if (polygon) {
+					if (
 						body._dirty_coords ||
 						body.x       !== body._x ||
 						body.y       !== body._y ||
@@ -259,7 +259,7 @@ export default class BVH {
 				update = min_x < body._bvh_min_x || min_y < body._bvh_min_y || max_x > body._bvh_max_x || max_y > body._bvh_max_y;
 			}
 
-			if(update) {
+			if (update) {
 				this.remove(body, true);
 				this.insert(body, true);
 			}
@@ -281,17 +281,17 @@ export default class BVH {
 		let current       = this._hierarchy;
 		let traverse_left = true;
 
-		if(!current || !current._bvh_branch) {
+		if (!current || !current._bvh_branch) {
 			return results;
 		}
 
-		while(current) {
-			if(traverse_left) {
+		while (current) {
+			if (traverse_left) {
 				traverse_left = false;
 
 				let left = current._bvh_branch ? current._bvh_left : null;
 
-				while(
+				while (
 					left &&
 					left._bvh_max_x >= min_x &&
 					left._bvh_max_y >= min_y &&
@@ -306,7 +306,7 @@ export default class BVH {
 			const branch = current._bvh_branch;
 			const right  = branch ? current._bvh_right : null;
 
-			if(
+			if (
 				right &&
 				right._bvh_max_x > min_x &&
 				right._bvh_max_y > min_y &&
@@ -317,14 +317,14 @@ export default class BVH {
 				traverse_left = true;
 			}
 			else {
-				if(!branch && current !== body) {
+				if (!branch && current !== body) {
 					results.push(current);
 				}
 
 				let parent = current._bvh_parent;
 
-				if(parent) {
-					while(parent && parent._bvh_right === current) {
+				if (parent) {
+					while (parent && parent._bvh_right === current) {
 						current = parent;
 						parent  = current._bvh_parent;
 					}
@@ -348,7 +348,7 @@ export default class BVH {
 		const bodies = this._bodies;
 		const count  = bodies.length;
 
-		for(let i = 0; i < count; ++i) {
+		for (let i = 0; i < count; ++i) {
 			bodies[i].draw(context);
 		}
 	}
@@ -361,13 +361,13 @@ export default class BVH {
 		let current       = this._hierarchy;
 		let traverse_left = true;
 
-		while(current) {
-			if(traverse_left) {
+		while (current) {
+			if (traverse_left) {
 				traverse_left = false;
 
 				let left = current._bvh_branch ? current._bvh_left : null;
 
-				while(left) {
+				while (left) {
 					current = left;
 					left    = current._bvh_branch ? current._bvh_left : null;
 				}
@@ -386,15 +386,15 @@ export default class BVH {
 			context.lineTo(min_x, max_y);
 			context.lineTo(min_x, min_y);
 
-			if(right) {
+			if (right) {
 				current       = right;
 				traverse_left = true;
 			}
 			else {
 				let parent = current._bvh_parent;
 
-				if(parent) {
-					while(parent && parent._bvh_right === current) {
+				if (parent) {
+					while (parent && parent._bvh_right === current) {
 						current = parent;
 						parent  = current._bvh_parent;
 					}
@@ -407,4 +407,4 @@ export default class BVH {
 			}
 		}
 	}
-};
+}

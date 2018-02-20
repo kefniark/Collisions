@@ -13,7 +13,7 @@ export default function SAT(a, b, result = null, aabb = true) {
 
 	let collision = false;
 
-	if(result) {
+	if (result) {
 		result.a         = a;
 		result.b         = b;
 		result.a_in_b    = true;
@@ -23,8 +23,8 @@ export default function SAT(a, b, result = null, aabb = true) {
 		result.overlap_y = 0;
 	}
 
-	if(a_polygon) {
-		if(
+	if (a_polygon) {
+		if (
 			a._dirty_coords ||
 			a.x       !== a._x ||
 			a.y       !== a._y ||
@@ -36,8 +36,8 @@ export default function SAT(a, b, result = null, aabb = true) {
 		}
 	}
 
-	if(b_polygon) {
-		if(
+	if (b_polygon) {
+		if (
 			b._dirty_coords ||
 			b.x       !== b._x ||
 			b.y       !== b._y ||
@@ -49,34 +49,34 @@ export default function SAT(a, b, result = null, aabb = true) {
 		}
 	}
 
-	if(!aabb || aabbAABB(a, b)) {
-		if(a_polygon && a._dirty_normals) {
+	if (!aabb || aabbAABB(a, b)) {
+		if (a_polygon && a._dirty_normals) {
 			a._calculateNormals();
 		}
 
-		if(b_polygon && b._dirty_normals) {
+		if (b_polygon && b._dirty_normals) {
 			b._calculateNormals();
 		}
 
-		collision = (
+		collision =
 			a_polygon && b_polygon ? polygonPolygon(a, b, result) :
 			a_polygon ? polygonCircle(a, b, result, false) :
 			b_polygon ? polygonCircle(b, a, result, true) :
-			circleCircle(a, b, result)
-		);
-	}
+			circleCircle(a, b, result);
+}
 
-	if(result) {
+	if (result) {
 		result.collision = collision;
 	}
 
 	return collision;
-};
+}
 
 /**
  * Determines if two bodies' axis aligned bounding boxes are colliding
  * @param {Circle|Polygon|Point} a The source body to test
  * @param {Circle|Polygon|Point} b The target body to test against
+ * @returns {Boolean}
  */
 function aabbAABB(a, b) {
 	const a_polygon = a._polygon;
@@ -112,11 +112,11 @@ function polygonPolygon(a, b, result = null) {
 	const b_count = b._coords.length;
 
 	// Handle points specially
-	if(a_count === 2 && b_count === 2) {
+	if (a_count === 2 && b_count === 2) {
 		const a_coords = a._coords;
 		const b_coords = b._coords;
 
-		if(result) {
+		if (result) {
 			result.overlap = 0;
 		}
 
@@ -128,17 +128,17 @@ function polygonPolygon(a, b, result = null) {
 	const a_normals = a._normals;
 	const b_normals = b._normals;
 
-	if(a_count > 2) {
-		for(let ix = 0, iy = 1; ix < a_count; ix += 2, iy += 2) {
-			if(separatingAxis(a_coords, b_coords, a_normals[ix], a_normals[iy], result)) {
+	if (a_count > 2) {
+		for (let ix = 0, iy = 1; ix < a_count; ix += 2, iy += 2) {
+			if (separatingAxis(a_coords, b_coords, a_normals[ix], a_normals[iy], result)) {
 				return false;
 			}
 		}
 	}
 
-	if(b_count > 2) {
-		for(let ix = 0, iy = 1; ix < b_count; ix += 2, iy += 2) {
-			if(separatingAxis(a_coords, b_coords, b_normals[ix], b_normals[iy], result)) {
+	if (b_count > 2) {
+		for (let ix = 0, iy = 1; ix < b_count; ix += 2, iy += 2) {
+			if (separatingAxis(a_coords, b_coords, b_normals[ix], b_normals[iy], result)) {
 				return false;
 			}
 		}
@@ -173,16 +173,16 @@ function polygonCircle(a, b, result = null, reverse = false) {
 	let overlap_y = 0;
 
 	// Handle points specially
-	if(count === 2) {
+	if (count === 2) {
 		const coord_x        = b_x - a_coords[0];
 		const coord_y        = b_y - a_coords[1];
 		const length_squared = coord_x * coord_x + coord_y * coord_y;
 
-		if(length_squared > radius_squared) {
+		if (length_squared > radius_squared) {
 			return false;
 		}
 
-		if(result) {
+		if (result) {
 			const length = Math.sqrt(length_squared);
 
 			overlap   = b_radius - length;
@@ -192,7 +192,7 @@ function polygonCircle(a, b, result = null, reverse = false) {
 		}
 	}
 	else {
-		for(let ix = 0, iy = 1; ix < count; ix += 2, iy += 2) {
+		for (let ix = 0, iy = 1; ix < count; ix += 2, iy += 2) {
 			const coord_x = b_x - a_coords[ix];
 			const coord_y = b_y - a_coords[iy];
 			const edge_x  = a_edges[ix];
@@ -205,13 +205,13 @@ function polygonCircle(a, b, result = null, reverse = false) {
 			let tmp_overlap_x   = 0;
 			let tmp_overlap_y   = 0;
 
-			if(result && a_in_b && coord_x * coord_x + coord_y * coord_y > radius_squared) {
+			if (result && a_in_b && coord_x * coord_x + coord_y * coord_y > radius_squared) {
 				a_in_b = false;
 			}
 
-			if(region) {
+			if (region) {
 				const left     = region === -1;
-				const other_x  = left ? (ix === 0 ? count - 2 : ix - 2) : (ix === count - 2 ? 0 : ix + 2);
+				const other_x  = left ? ix === 0 ? count - 2 : ix - 2 : ix === count - 2 ? 0 : ix + 2;
 				const other_y  = other_x + 1;
 				const coord2_x = b_x - a_coords[other_x];
 				const coord2_y = b_y - a_coords[other_y];
@@ -220,16 +220,16 @@ function polygonCircle(a, b, result = null, reverse = false) {
 				const dot2     = coord2_x * edge2_x + coord2_y * edge2_y;
 				const region2  = dot2 < 0 ? -1 : dot2 > edge2_x * edge2_x + edge2_y * edge2_y ? 1 : 0;
 
-				if(region2 === -region) {
+				if (region2 === -region) {
 					const target_x       = left ? coord_x : coord2_x;
 					const target_y       = left ? coord_y : coord2_y;
 					const length_squared = target_x * target_x + target_y * target_y;
 
-					if(length_squared > radius_squared) {
+					if (length_squared > radius_squared) {
 						return false;
 					}
 
-					if(result) {
+					if (result) {
 						const length = Math.sqrt(length_squared);
 
 						tmp_overlapping = true;
@@ -246,23 +246,23 @@ function polygonCircle(a, b, result = null, reverse = false) {
 				const length          = coord_x * normal_x + coord_y * normal_y;
 				const absolute_length = length < 0 ? -length : length;
 
-				if(length > 0 && absolute_length > b_radius) {
+				if (length > 0 && absolute_length > b_radius) {
 					return false;
 				}
 
-				if(result) {
+				if (result) {
 					tmp_overlapping = true;
 					tmp_overlap     = b_radius - length;
 					tmp_overlap_x   = normal_x;
 					tmp_overlap_y   = normal_y;
 
-					if(b_in_a && length >= 0 || tmp_overlap < b_radius2) {
+					if (b_in_a && length >= 0 || tmp_overlap < b_radius2) {
 						b_in_a = false;
 					}
 				}
 			}
 
-			if(tmp_overlapping && (overlap === null || overlap > tmp_overlap)) {
+			if (tmp_overlapping && (overlap === null || overlap > tmp_overlap)) {
 				overlap   = tmp_overlap;
 				overlap_x = tmp_overlap_x;
 				overlap_y = tmp_overlap_y;
@@ -270,7 +270,7 @@ function polygonCircle(a, b, result = null, reverse = false) {
 		}
 	}
 
-	if(result) {
+	if (result) {
 		result.a_in_b    = reverse ? b_in_a : a_in_b;
 		result.b_in_a    = reverse ? a_in_b : b_in_a;
 		result.overlap   = overlap;
@@ -296,11 +296,11 @@ function circleCircle(a, b, result = null) {
 	const radius_sum     = a_radius + b_radius;
 	const length_squared = difference_x * difference_x + difference_y * difference_y;
 
-	if(length_squared > radius_sum * radius_sum) {
+	if (length_squared > radius_sum * radius_sum) {
 		return false;
 	}
 
-	if(result) {
+	if (result) {
 		const length = Math.sqrt(length_squared);
 
 		result.a_in_b    = a_radius <= b_radius && length <= b_radius - a_radius;
@@ -326,7 +326,7 @@ function separatingAxis(a_coords, b_coords, x, y, result = null) {
 	const a_count = a_coords.length;
 	const b_count = b_coords.length;
 
-	if(!a_count || !b_count) {
+	if (!a_count || !b_count) {
 		return true;
 	}
 
@@ -335,41 +335,41 @@ function separatingAxis(a_coords, b_coords, x, y, result = null) {
 	let b_start = null;
 	let b_end   = null;
 
-	for(let ix = 0, iy = 1; ix < a_count; ix += 2, iy += 2) {
+	for (let ix = 0, iy = 1; ix < a_count; ix += 2, iy += 2) {
 		const dot = a_coords[ix] * x + a_coords[iy] * y;
 
-		if(a_start === null || a_start > dot) {
+		if (a_start === null || a_start > dot) {
 			a_start = dot;
 		}
 
-		if(a_end === null || a_end < dot) {
+		if (a_end === null || a_end < dot) {
 			a_end = dot;
 		}
 	}
 
-	for(let ix = 0, iy = 1; ix < b_count; ix += 2, iy += 2) {
+	for (let ix = 0, iy = 1; ix < b_count; ix += 2, iy += 2) {
 		const dot = b_coords[ix] * x + b_coords[iy] * y;
 
-		if(b_start === null || b_start > dot) {
+		if (b_start === null || b_start > dot) {
 			b_start = dot;
 		}
 
-		if(b_end === null || b_end < dot) {
+		if (b_end === null || b_end < dot) {
 			b_end = dot;
 		}
 	}
 
-	if(a_start > b_end || a_end < b_start) {
+	if (a_start > b_end || a_end < b_start) {
 		return true;
 	}
 
-	if(result) {
+	if (result) {
 		let overlap = 0;
 
-		if(a_start < b_start) {
+		if (a_start < b_start) {
 			result.a_in_b = false;
 
-			if(a_end < b_end) {
+			if (a_end < b_end) {
 				overlap       = a_end - b_start;
 				result.b_in_a = false;
 			}
@@ -383,7 +383,7 @@ function separatingAxis(a_coords, b_coords, x, y, result = null) {
 		else {
 			result.b_in_a = false;
 
-			if(a_end > b_end) {
+			if (a_end > b_end) {
 				overlap       = a_start - b_end;
 				result.a_in_b = false;
 			}
@@ -398,7 +398,7 @@ function separatingAxis(a_coords, b_coords, x, y, result = null) {
 		const current_overlap  = result.overlap;
 		const absolute_overlap = overlap < 0 ? -overlap : overlap;
 
-		if(current_overlap === null || current_overlap > absolute_overlap) {
+		if (current_overlap === null || current_overlap > absolute_overlap) {
 			const sign = overlap < 0 ? -1 : 1;
 
 			result.overlap   = absolute_overlap;
